@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<!--
+  友南开发技术（深圳）有限公司 · 公司站
+  ------------------------------------------------------------
+  骨架来自 E:\网页\V2.0（极曜微科技那套）：同一套设计令牌、同一套导航与渐显脚本，
+  只换了内容和这站才有的三个版块（链路图 .arch / 配套品类 .goods / 经营范围 .scope）。
+  内容来源：你给的营业执照经营范围原文，没有编造案例、客户数、资质证号。
+  页面顺序：首屏（业务关键词滚动条）→ 业务方向 → 链路上做哪几段 → 设备与器材配套
+       → 数字带（含口径说明）→ 合作流程 → 经营范围（一般 / 许可）→ 联系。
+  还没定的东西（电话、邮箱、地址、备案号）一律标成 .todo，不给假的，见 css/layout.css 第 9 节。
+-->
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>友南开发技术（深圳）有限公司 · 软件开发与物联网系统集成</title>
+<meta name="description" content="友南开发技术（深圳）有限公司：软件开发、物联网技术研发、信息系统集成服务、5G通信技术服务、人工智能基础资源与技术平台、工业互联网数据服务、集成电路芯片设计及服务、网络与信息技术咨询服务；货物与技术进出口；计算机软硬件、安防、电子专用设备等到货配套。深圳立足珠三角。">
+<!-- 图标用 data URI 内联 SVG（三个节点连成一条链路），不带图片文件，深浅主题下都不会出现一块白方片 -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 27V16M16 16 6 7M16 16l10-9' stroke='%230071e3' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='27' r='3.4' fill='%230071e3'/%3E%3Ccircle cx='6' cy='7' r='3' fill='%2319b3a6'/%3E%3Ccircle cx='26' cy='7' r='3' fill='%235ac8fa'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/effects.css">
+<link rel="stylesheet" href="css/menu.css">    <!-- 磨砂下拉面板：不要它就删掉这行 + js/menu.js + 下面 5 个 .menu -->
+</head>
+<body>
+
+<!-- ============ 导航 ============
+     每个栏目都是"触发器"：data-menu 的值对应下面某个面板的 id（menu- + 值）。
+     删掉某个面板就把对应栏目上的 data-menu / caret 一起去掉，那个栏目会自动退回普通锚点。
+     注意：带 data-menu 的栏目点下去只开面板不跳转（js/menu.js 会 preventDefault），
+     所以真正要一键点得到的「联系我们」单独做成右侧那颗胶囊，任何滚动位置都能直接进。 -->
+<header class="nav">
+  <div class="nav__inner">
+    <a class="nav__logo" href="#top">
+      <svg class="nav__mark" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M16 27V16M16 16 6 7M16 16l10-9" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".45"/>
+        <circle cx="16" cy="27" r="3.4" fill="currentColor"/>
+        <circle cx="6" cy="7" r="3" fill="currentColor" opacity=".7"/>
+        <circle cx="26" cy="7" r="3" fill="currentColor" opacity=".7"/>
+      </svg>
+      友南开发技术
+    </a>
+    <nav class="nav__links">
+      <a href="#services" data-menu="services" aria-expanded="false" aria-controls="menu-services" aria-haspopup="true">业务<span class="caret" aria-hidden="true">▾</span></a>
+      <a href="#arch" data-menu="arch" aria-expanded="false" aria-controls="menu-arch" aria-haspopup="true">链路<span class="caret" aria-hidden="true">▾</span></a>
+      <a href="#goods" data-menu="goods" aria-expanded="false" aria-controls="menu-goods" aria-haspopup="true">配套<span class="caret" aria-hidden="true">▾</span></a>
+      <a href="#flow" data-menu="flow" aria-expanded="false" aria-controls="menu-flow" aria-haspopup="true">流程<span class="caret" aria-hidden="true">▾</span></a>
+      <a href="#scope" data-menu="scope" aria-expanded="false" aria-controls="menu-scope" aria-haspopup="true">经营范围<span class="caret" aria-hidden="true">▾</span></a>
+    </nav>
+    <div class="nav__tools">
+      <button class="theme-btn" type="button" aria-label="切换主题">☀</button>
+      <a class="btn btn--ghost nav__quote" href="#scope" style="padding:7px 16px;font-size:14px">看经营范围</a>
+      <a class="btn nav__enter" href="#contact" style="padding:7px 16px;font-size:14px">联系我们</a>
+      <button class="nav__burger" type="button" data-menu="all" aria-label="打开菜单" aria-expanded="false" aria-controls="menu-all"><i></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- 整页压暗 + 磨砂，靠 backdrop-filter 糊掉导航以下的全部内容。
+     z-index 40 低于导航(50)和面板(51)，所以只有"背景"被糊，导航和面板自己保持清晰。 -->
+<div class="menu-scrim" aria-hidden="true"></div>
+
+<!-- ============ 五个下拉面板 + 一个窄屏整屏菜单 ============
+     写在 </header> 外面、和导航做兄弟节点，不能写进 .nav 里：
+     .nav.is-stuck 有 backdrop-filter，它会变成 fixed 后代的包含块，
+     窄屏那条 top:var(--nav-h);bottom:0 会被算成零高度。细节见 css/menu.css 头部注释。 -->
+
+<div class="menu" id="menu-services" aria-hidden="true">
+  <div class="menu__inner">
+    <div class="menu__cols">
+      <div>
+        <p class="menu__tit">研发与集成</p>
+        <a class="menu__item" href="#services">软件开发<span>管理系统、数据看板、对外接口与小程序定制</span></a>
+        <a class="menu__item" href="#services">物联网技术研发<span>设备接入、协议适配、边缘采集、远程运维</span></a>
+        <a class="menu__item" href="#services">信息系统集成服务<span>弱电系统与既有业务系统对接到一个平台</span></a>
+        <a class="menu__item" href="#services">5G通信技术服务<span>专网组网、模块选型、现场信号勘察</span></a>
+      </div>
+      <div>
+        <p class="menu__tit">数据与平台</p>
+        <a class="menu__item" href="#services">人工智能基础资源与技术平台<span>算力与数据环境搭建、模型部署与推理接口</span></a>
+        <a class="menu__item" href="#services">工业互联网数据服务<span>产线数据采集、清洗、指标口径与报表</span></a>
+        <a class="menu__item" href="#services">集成电路芯片设计及服务<span>设计验证环节支持、评估板与方案配套</span></a>
+      </div>
+      <div>
+        <p class="menu__tit">服务与咨询</p>
+        <a class="menu__item" href="#services">网络技术服务<span>组网、割接、链路排障与网络改造实施</span></a>
+        <a class="menu__item" href="#services">信息技术咨询服务<span>选型评估、方案论证、投标与验收技术文件</span></a>
+        <a class="menu__item" href="#contact">直接说需求<span>说清场景、预算、要接什么设备或系统</span></a>
+      </div>
+    </div>
+    <div class="menu__foot">
+      <p class="t-fine">上面九块对应营业执照登记的九项研发与技术服务，没有另立名目。</p>
+      <a class="link-arrow" href="#services">看业务方向 <span class="ar">›</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="menu" id="menu-arch" aria-hidden="true">
+  <div class="menu__inner">
+    <div class="menu__cols">
+      <div>
+        <p class="menu__tit">链路五段</p>
+        <a class="menu__item" href="#arch">01 设备与传感<span>现场有什么就接什么，不挑品牌</span></a>
+        <a class="menu__item" href="#arch">02 采集与边缘<span>协议适配与本地缓存在现场这一侧做完</span></a>
+      </div>
+      <div>
+        <p class="menu__tit">中段与上层</p>
+        <a class="menu__item" href="#arch">03 网络与传输<span>5G 专网、工业以太网、无线 AP 与布线</span></a>
+        <a class="menu__item" href="#arch">04 平台与数据<span>入库、指标口径、权限、告警与推理接口</span></a>
+        <a class="menu__item" href="#arch">05 应用与运维<span>业务系统、看板、移动端与值守巡检</span></a>
+      </div>
+      <div>
+        <p class="menu__tit">怎么配合</p>
+        <a class="menu__item" href="#flow">只做其中一段也行<span>配置清单会写清哪段归我们、哪段要甲方配合</span></a>
+        <a class="menu__item" href="#goods">设备由我们配套<span>登记在册的九类，按询价确认型号</span></a>
+      </div>
+    </div>
+    <div class="menu__foot">
+      <p class="t-fine">链路图是工作方式示意，不是某个具体项目的方案图。</p>
+      <a class="link-arrow" href="#arch">看链路图 <span class="ar">›</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="menu" id="menu-goods" aria-hidden="true">
+  <div class="menu__inner">
+    <div class="menu__cols">
+      <div>
+        <p class="menu__tit">计算机与电子</p>
+        <a class="menu__item" href="#goods">计算机软硬件及辅助设备<span>零售：服务器、工作站、工控机与外设</span></a>
+        <a class="menu__item" href="#goods">电子产品<span>终端、通信模块与消费电子类配套</span></a>
+        <a class="menu__item" href="#goods">电子元器件与机电组件设备<span>阻容感、连接器、电机与驱动组件</span></a>
+      </div>
+      <div>
+        <p class="menu__tit">工程与场站</p>
+        <a class="menu__item" href="#goods">安防设备<span>监控、门禁、报警与配套存储</span></a>
+        <a class="menu__item" href="#goods">电子专用设备<span>生产与检测环节的专用设备</span></a>
+        <a class="menu__item" href="#goods">充电桩<span>园区与场站的充电配套</span></a>
+      </div>
+      <div>
+        <p class="menu__tit">声像与家电</p>
+        <a class="menu__item" href="#goods">广播影视设备<span>会议扩声、演播与显示配套</span></a>
+        <a class="menu__item" href="#goods">音响设备<span>扩声与会议音频</span></a>
+        <a class="menu__item" href="#goods">家用电器<span>工程随货与配套</span></a>
+      </div>
+    </div>
+    <div class="menu__foot">
+      <p class="t-fine">这里是营业执照登记的销售品类，不是现货清单；型号、数量与价格按询价确认。</p>
+      <a class="link-arrow" href="#goods">看九类明细 <span class="ar">›</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="menu" id="menu-flow" aria-hidden="true">
+  <div class="menu__inner">
+    <div class="menu__cols">
+      <div>
+        <p class="menu__tit">起步</p>
+        <a class="menu__item" href="#flow">1. 说清场景与目标<span>用在哪、接什么、要达到什么效果</span></a>
+        <a class="menu__item" href="#flow">2. 出方案与配置清单<span>链路分段报价，责任段写明白</span></a>
+      </div>
+      <div>
+        <p class="menu__tit">落地</p>
+        <a class="menu__item" href="#flow">3. 开发与集成实施<span>软件、到货安装、现场布线</span></a>
+        <a class="menu__item" href="#flow">4. 联调与验收<span>点位表、阈值、权限与数据口径逐项过</span></a>
+        <a class="menu__item" href="#flow">5. 运维与技术支持<span>值守、巡检、扩容与备件</span></a>
+      </div>
+      <div>
+        <p class="menu__tit">要留意的</p>
+        <a class="menu__item" href="#scope">建设工程施工是许可项目<span>依法须经批准，具体以相关部门批准文件为准</span></a>
+        <a class="menu__item" href="#numbers">数字带怎么算的<span>10 / 9 / 2 / 23 的口径写在下面</span></a>
+      </div>
+    </div>
+    <div class="menu__foot">
+      <p class="t-fine">流程是接单方式说明，不代表任何已交付项目。</p>
+      <a class="link-arrow" href="#flow">看流程 <span class="ar">›</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="menu" id="menu-scope" aria-hidden="true">
+  <div class="menu__inner">
+    <div class="menu__cols">
+      <div>
+        <p class="menu__tit">一般项目</p>
+        <a class="menu__item" href="#scope">21 项，凭营业执照自主开展<span>研发与技术服务 10 项 · 设备与器材销售 9 类 · 进出口 2 项</span></a>
+        <a class="menu__item" href="#services">研发与技术服务<span>软件开发、物联网、系统集成、5G、AI 平台、工业数据、芯片设计等</span></a>
+      </div>
+      <div>
+        <p class="menu__tit">许可项目</p>
+        <a class="menu__item" href="#scope">建设工程施工<span>依法须经批准，经相关部门批准后方可开展</span></a>
+        <a class="menu__item" href="#scope">电气安装服务<span>同上，具体以相关部门批准文件或许可证件为准</span></a>
+      </div>
+      <div>
+        <p class="menu__tit">上线前要补的</p>
+        <a class="menu__item" href="#contact">联系电话、邮箱、注册地址<span>现在页面上是"待补"标记，没有填假号码</span></a>
+        <a class="menu__item" href="#contact">ICP 备案号<span>页脚留了位置</span></a>
+      </div>
+    </div>
+    <div class="menu__foot">
+      <p class="t-fine">经营范围按营业执照原文逐条列出，条数与页脚一致。</p>
+      <a class="link-arrow" href="#scope">看经营范围 <span class="ar">›</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- 窄屏专用：汉堡按钮展开的整屏菜单，只放栏目级入口，不做多列 -->
+<div class="menu" id="menu-all" aria-hidden="true">
+  <div class="menu__inner">
+    <div class="menu__cols">
+      <div>
+        <a class="menu__item" href="#services">业务方向<span>九项研发与技术服务 + 技术转让推广</span></a>
+        <a class="menu__item" href="#arch">链路五段<span>设备 / 边缘 / 网络 / 平台 / 应用</span></a>
+        <a class="menu__item" href="#goods">设备与器材配套<span>登记在册的九类</span></a>
+        <a class="menu__item" href="#numbers">数字与口径<span>10 / 9 / 2 / 23 怎么数出来的</span></a>
+        <a class="menu__item" href="#flow">合作流程<span>从说清场景到运维值守</span></a>
+        <a class="menu__item" href="#scope">经营范围<span>一般 21 项 · 许可 2 项</span></a>
+        <a class="menu__item" href="#contact">联系我们<span>电话邮箱待补，先说需求</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main id="top">
+
+<!-- ============ Hero ============ -->
+<section class="hero" id="overview">
+  <div class="orb orb--1"></div>
+  <div class="orb orb--2"></div>
+  <div class="orb orb--3"></div>
+  <p class="t-eyebrow" data-rv>友南开发技术（深圳）有限公司</p>
+
+  <h1 class="t-hero" data-rv>软件开发与物联网<br><span class="t-grad">系统集成、数据服务</span></h1>
+  <p class="t-sub" data-rv style="max-width:52ch;margin:18px auto 0">从设备接入、平台开发到信息系统集成，链路上的某一段或者整条都能接。深圳立足珠三角，货物进出口、技术进出口都可开展。</p>
+
+  <div class="hero__cta" data-rv>
+    <a class="btn" href="#contact">说需求，我们出方案</a>
+    <a class="link-arrow" href="#services">看业务方向 <span class="ar">›</span></a>
+  </div>
+  <p class="hero__hint" data-rv>说清三件事就够开始：用在什么场景、要接什么设备或系统、大概什么预算。</p>
+
+  <!-- 业务关键词滚动条：写在 hero 里面 + absolute 贴底，不用往下滚就能看到我们在做什么。
+       内容复制两份、轨道位移 -50% —— 少了第二份就会滚出空白。 -->
+  <div class="marquee marquee--hero" aria-label="登记业务关键词">
+    <div class="marquee__track">
+      <span>软件开发</span><span>·</span><span>物联网技术研发</span><span>·</span><span>信息系统集成服务</span><span>·</span><span>5G通信技术服务</span><span>·</span><span>人工智能基础资源与技术平台</span><span>·</span><span>工业互联网数据服务</span><span>·</span><span>集成电路芯片设计及服务</span><span>·</span><span>网络技术服务</span><span>·</span><span>信息技术咨询服务</span><span>·</span><span>货物进出口</span><span>·</span><span>技术进出口</span><span>·</span>
+      <span>软件开发</span><span>·</span><span>物联网技术研发</span><span>·</span><span>信息系统集成服务</span><span>·</span><span>5G通信技术服务</span><span>·</span><span>人工智能基础资源与技术平台</span><span>·</span><span>工业互联网数据服务</span><span>·</span><span>集成电路芯片设计及服务</span><span>·</span><span>网络技术服务</span><span>·</span><span>信息技术咨询服务</span><span>·</span><span>货物进出口</span><span>·</span><span>技术进出口</span><span>·</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 业务方向 ============ -->
+<section class="section section--alt" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="t-eyebrow" data-rv>Services</p>
+      <h2 class="t-title" data-rv>九项研发与技术服务</h2>
+      <p class="t-body" data-rv style="margin-top:12px">标题就是营业执照上的登记项原文，下面一句是我们实际怎么干。第十项「技术服务、技术开发、技术咨询、技术交流、技术转让、技术推广」在执照上登记为一项，写在最后一格。</p>
+    </div>
+    <div class="grid">
+      <article class="card" data-rv><div class="card__ic" aria-hidden="true">⌘</div><h3>软件开发</h3><p>管理系统、数据看板、对外接口与小程序定制开发，从需求梳理到部署上线一段接完。</p></article>
+      <article class="card" data-rv><div class="card__ic" aria-hidden="true">◈</div><h3>物联网技术研发</h3><p>设备接入、协议适配、边缘采集与远程运维，把现场设备连成一套查得到的数据。</p></article>
+      <article class="card" data-rv><div class="card__ic" aria-hidden="true">⧉</div><h3>信息系统集成服务</h3><p>网络、机房、监控门禁、广播音响等子系统，与既有业务系统对接到同一个平台上。</p></article>
+      <article class="card" data-rv><div class="card__ic" aria-hidden="true">≋</div><h3>5G通信技术服务</h3><p>5G 专网与通信模块选型、现场信号勘察、上行链路配置，配合产线和园区的无线覆盖。</p></article>
+      <article class="card" data-rv><div class="card__ic" aria-hidden="true">⊞</div><h3>人工智能基础资源与技术平台</h3><p>算力与数据资源环境搭建、模型部署与推理接口，做的是基础设施这一层。</p></article>
+      <article class="card" data-rv><div class="card__ic" aria-hidden="true">▤</div><h3>工业互联网数据服务</h3><p>产线数据采集、清洗、指标口径与报表，把设备数据接进日常经营管理里用。</p></article>
+      <article class="card" data-rv><div class="card__ic" aria-hidden="true">⬡</div><h3>集成电路芯片设计及服务</h3><p>设计与验证环节的技术支持、评估板与方案配套，配合整机选型一起推进。</p></article>
+      <article class="card" data-rv><div class="card__ic" aria-hidden="true">⇄</div><h3>网络技术服务</h3><p>组网、割接、链路排障与网络改造实施，现场问题现场定位。</p></article>
+      <article class="card" data-rv><div class="card__ic" aria-hidden="true">◎</div><h3>信息技术咨询服务</h3><p>选型评估、方案论证，以及投标与验收环节需要的技术文件支持。</p></article>
+      <article class="card span12" data-rv style="flex-direction:row;flex-wrap:wrap;align-items:center;min-height:0;gap:14px 22px">
+        <h3 style="flex:0 0 auto">技术服务 · 技术开发 · 技术咨询 · 技术交流 · 技术转让 · 技术推广</h3>
+        <p style="flex:1;min-width:220px">执照上登记为一项，实际按你要哪一种单独签：驻场技术支持、联合开发、成果与技术转让、培训与交流都可以拆开谈。</p>
+        <a class="link-arrow" href="#contact">问一种给法 <span class="ar">›</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 链路五段 ============ -->
+<section class="section" id="arch">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="t-eyebrow" data-rv>Architecture</p>
+      <h2 class="t-title" data-rv>一条链路上，我们能接哪几段</h2>
+      <p class="t-body" data-rv style="margin-top:12px">只做其中一段也行。方案与配置清单里会写清哪一段归我们、哪一段要甲方或第三方配合，不写含糊的"整体负责"。</p>
+    </div>
+    <div class="arch" data-rv>
+      <div class="arch__col">
+        <p class="arch__n">01</p><h4>设备与传感</h4>
+        <ul><li>传感器与仪表</li><li>摄像头、门禁、广播</li><li>充电桩与配电监测</li><li>已有设备不改造，先做接入</li></ul>
+      </div>
+      <div class="arch__col">
+        <p class="arch__n">02</p><h4>采集与边缘</h4>
+        <ul><li>工业网关与协议适配</li><li>Modbus / MQTT / OPC UA</li><li>本地缓存与断点续传</li><li>现场能判的不推给云端</li></ul>
+      </div>
+      <div class="arch__col">
+        <p class="arch__n">03</p><h4>网络与传输</h4>
+        <ul><li>5G 专网与上行链路</li><li>工业以太网、光纤</li><li>无线 AP 与信号勘察</li><li>布线与网络改造同批做</li></ul>
+      </div>
+      <div class="arch__col">
+        <p class="arch__n">04</p><h4>平台与数据</h4>
+        <ul><li>数据入库与指标口径</li><li>权限、告警与审计</li><li>算力与模型部署环境</li><li>对外接口与数据服务</li></ul>
+      </div>
+      <div class="arch__col">
+        <p class="arch__n">05</p><h4>应用与运维</h4>
+        <ul><li>业务系统与数据看板</li><li>小程序与移动端</li><li>值守、巡检与扩容</li><li>备件与故障响应</li></ul>
+      </div>
+    </div>
+    <p class="t-fine" data-rv style="margin-top:18px">这张图说的是工作方式，不是某个已交付项目的方案图；具体点位和拓扑按现场勘察结果出。</p>
+  </div>
+</section>
+
+<!-- ============ 设备与器材配套 ============ -->
+<section class="section section--alt" id="goods">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="t-eyebrow" data-rv>Supply</p>
+      <h2 class="t-title" data-rv>九类设备与器材，可以随项目一起配套</h2>
+      <p class="t-body" data-rv style="margin-top:12px">下面是营业执照登记的销售品类，不是现货清单。型号、数量与价格按询价确认，跟着项目一起走货，省掉你自己分头采购的对接成本。</p>
+    </div>
+    <div class="goods" data-rv>
+      <div class="goods__row"><p class="goods__k">计算机软硬件及辅助设备</p><p class="goods__v">登记为零售。服务器、工作站、工控机、终端与外设。</p></div>
+      <div class="goods__row"><p class="goods__k">电子产品</p><p class="goods__v">整机与部件、通信模块、消费电子类配套。</p></div>
+      <div class="goods__row"><p class="goods__k">电子元器件与机电组件设备</p><p class="goods__v">阻容感与连接器、电机与驱动等机电组件。</p></div>
+      <div class="goods__row"><p class="goods__k">电子专用设备</p><p class="goods__v">生产与检测环节的专用设备及其配套工装。</p></div>
+      <div class="goods__row"><p class="goods__k">安防设备</p><p class="goods__v">监控、门禁、报警与配套存储，含与业务系统对接。</p></div>
+      <div class="goods__row"><p class="goods__k">广播影视设备</p><p class="goods__v">会议扩声、演播与显示配套。</p></div>
+      <div class="goods__row"><p class="goods__k">音响设备</p><p class="goods__v">扩声与会议音频，园区与厂房分区广播。</p></div>
+      <div class="goods__row"><p class="goods__k">充电桩</p><p class="goods__v">园区与场站充电配套，可与平台侧数据接入同批做。</p></div>
+      <div class="goods__row"><p class="goods__k">家用电器</p><p class="goods__v">工程随货与宿舍、办公配套。</p></div>
+    </div>
+    <div class="hero__cta" data-rv style="justify-content:flex-start;margin-top:28px">
+      <a class="btn btn--ghost" href="#contact">问一类货期与价格</a>
+      <a class="link-arrow" href="#scope">看完整经营范围 <span class="ar">›</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 数字带 ============ -->
+<section class="section" id="numbers">
+  <div class="wrap">
+    <div class="stats">
+      <div data-rv><div class="stat__num" data-to="10" data-suffix=" 项">0</div><div class="stat__lab">研发与技术服务</div></div>
+      <div data-rv><div class="stat__num" data-to="9" data-suffix=" 类">0</div><div class="stat__lab">设备与器材销售</div></div>
+      <div data-rv><div class="stat__num" data-to="2" data-suffix=" 项">0</div><div class="stat__lab">货物与技术进出口</div></div>
+      <div data-rv><div class="stat__num" data-to="23" data-suffix=" 项">0</div><div class="stat__lab">登记经营范围合计</div></div>
+    </div>
+    <p class="stats-note" data-rv>
+      口径：以上四项按营业执照登记的经营范围逐条数出，分号算一项。<br>
+      「技术服务、技术开发、技术咨询、技术交流、技术转让、技术推广」在执照上登记为一项，这里也按一项计入 10 项。<br>
+      合计 23 项 = 一般项目 21 项 + 许可项目 2 项（建设工程施工、电气安装服务），许可项目没有算进上面三格。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 合作流程 ============ -->
+<section class="section section--alt" id="flow">
+  <div class="wrap" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:48px;align-items:start">
+    <div class="sec-head" style="margin:0">
+      <p class="t-eyebrow" data-rv="left">How it works</p>
+      <h2 class="t-title" data-rv="left">不用先想好方案<br>说场景就行</h2>
+      <p class="t-body" data-rv="left">用在哪、要接什么设备或系统、大概什么预算 —— 这三句清楚，我们先给方案和分段配置清单，你再决定做到哪一段。</p>
+      <p class="t-fine" data-rv="left" style="margin-top:14px">涉及建设工程施工、电气安装服务的部分属许可项目，依法须经批准后方可开展，具体以相关部门批准文件或许可证件为准。</p>
+    </div>
+    <div class="tl">
+      <div class="tl__row" data-rv="right"><h4>1. 说清场景与目标</h4><p>举例子最快：给车间做能耗看板、把园区门禁接进办公系统、仓库加监控与网络。</p></div>
+      <div class="tl__row" data-rv="right"><h4>2. 出方案与配置清单</h4><p>按链路分段报价，写清软件、设备、施工各段的分工与配合条件。</p></div>
+      <div class="tl__row" data-rv="right"><h4>3. 开发与集成实施</h4><p>软件开发、设备到货与安装、现场布线与网络配置并行推进。</p></div>
+      <div class="tl__row" data-rv="right"><h4>4. 联调与验收</h4><p>点位表、告警阈值、权限与数据口径逐项过，交付文档与使用培训。</p></div>
+      <div class="tl__row" data-rv="right"><h4>5. 运维与技术支持</h4><p>值守、巡检、扩容与备件供应，按年或按次都可以谈。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 经营范围（重音分区）============ -->
+<section class="section section--dark" id="scope">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="t-eyebrow" data-rv>Business Scope</p>
+      <h2 class="t-title" data-rv>经营范围：一般 21 项，许可 2 项</h2>
+      <p class="t-body" data-rv style="margin-top:12px">逐条照营业执照列，方便你核对能不能开票、以什么名义签合同。许可项目没批下来之前不对外承接。</p>
+    </div>
+    <div class="scope">
+      <div class="scope__box" data-rv>
+        <h3>一般项目</h3>
+        <p class="t-fine">除依法须经批准的项目外，凭营业执照依法自主开展经营活动</p>
+        <ul class="scope__list">
+          <li><b>软件开发</b></li>
+          <li><b>物联网技术研发</b></li>
+          <li><b>信息系统集成服务</b></li>
+          <li><b>5G通信技术服务</b></li>
+          <li><b>人工智能基础资源与技术平台</b></li>
+          <li><b>工业互联网数据服务</b></li>
+          <li><b>集成电路芯片设计及服务</b></li>
+          <li><b>技术服务、技术开发、技术咨询、技术交流、技术转让、技术推广</b></li>
+          <li><b>货物进出口</b></li>
+          <li><b>技术进出口</b></li>
+          <li><b>计算机软硬件及辅助设备零售</b></li>
+          <li><b>广播影视设备销售</b></li>
+          <li><b>安防设备销售</b></li>
+          <li><b>电子产品销售</b></li>
+          <li><b>家用电器销售</b></li>
+          <li><b>电子元器件与机电组件设备销售</b></li>
+          <li><b>电子专用设备销售</b></li>
+          <li><b>网络技术服务</b></li>
+          <li><b>信息技术咨询服务</b></li>
+          <li><b>充电桩销售</b></li>
+          <li><b>音响设备销售</b></li>
+        </ul>
+      </div>
+      <div class="scope__box scope__box--lic" data-rv>
+        <h3>许可项目</h3>
+        <p class="t-fine">依法须经批准的项目，经相关部门批准后方可开展经营活动，具体经营项目以相关部门批准文件或许可证件为准</p>
+        <ul class="scope__list">
+          <li><b>建设工程施工</b></li>
+          <li><b>电气安装服务</b></li>
+        </ul>
+        <p class="t-fine" style="margin-top:16px">这两项在页面上只作登记说明：批准文号与证书信息待补，补齐后再写"已具备"。</p>
+        <div class="hero__cta" style="margin-top:20px">
+          <a class="btn btn--ghost" href="#contact">问一项能不能做</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 联系 ============ -->
+<section class="section" id="contact" style="text-align:center">
+  <div class="wrap">
+    <p class="t-eyebrow" data-rv>Contact</p>
+    <h2 class="t-title" data-rv style="max-width:22ch;margin:0 auto">说清来意，我们回方案</h2>
+    <p class="t-body" data-rv style="max-width:46ch;margin:14px auto 0">先把场景、要接的设备或系统、大概预算发过来，我们按链路分段给配置清单和报价。</p>
+
+    <!-- 联系方式还没定，这里一律用 .todo 标出来，不给假号码；定稿后改这一处即可，
+         同时把页脚「联系」栏和 js 里没有引用的备注一起对上。 -->
+    <div class="goods" data-rv style="max-width:560px;margin:34px auto 0;text-align:left">
+      <div class="goods__row"><p class="goods__k">业务电话</p><p class="goods__v"><span class="todo">待补</span> 定稿后同时改成 tel: 链接</p></div>
+      <div class="goods__row"><p class="goods__k">邮箱</p><p class="goods__v"><span class="todo">待补</span></p></div>
+      <div class="goods__row"><p class="goods__k">注册地址</p><p class="goods__v">深圳 · <span class="todo">详细地址待补</span></p></div>
+      <div class="goods__row"><p class="goods__k">工作时间</p><p class="goods__v"><span class="todo">待补</span></p></div>
+    </div>
+
+    <div class="hero__cta" data-rv style="justify-content:center">
+      <a class="btn btn--ghost" href="#services">再看一眼业务方向</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__cols">
+      <div><h5>友南开发技术</h5><ul><li>友南开发技术（深圳）有限公司</li><li>软件开发与物联网系统集成</li><li>深圳 · 立足珠三角</li><li>货物进出口 · 技术进出口</li></ul></div>
+      <div><h5>业务</h5><ul><li><a href="#services">九项研发与技术服务 ›</a></li><li>软件开发</li><li>物联网技术研发</li><li>信息系统集成服务</li><li>5G通信技术服务</li><li>工业互联网数据服务</li></ul></div>
+      <div><h5>配套</h5><ul><li><a href="#goods">九类设备与器材 ›</a></li><li>计算机软硬件及辅助设备</li><li>安防设备</li><li>电子专用设备</li><li>充电桩</li></ul></div>
+      <div><h5>联系</h5><ul><li>业务电话：<span class="todo">待补</span></li><li>邮箱：<span class="todo">待补</span></li><li>深圳 · 地址<span class="todo">待补</span></li></ul></div>
+    </div>
+    <p class="footer__note">
+      页面说明：此处仅用于说明经营范围与业务方式，不含案例、客户与业绩声称。
+      正式上线前请补齐：业务电话、邮箱、注册地址、ICP 备案号；许可项目（建设工程施工、电气安装服务）以相关部门批准文件或许可证件为准，批文信息补齐后方可对外承接。
+      主体名称按营业执照写为「友南开发技术（深圳）有限公司」。
+    </p>
+  </div>
+</footer>
+
+<script src="js/reveal.js"></script>
+<script src="js/counter.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/menu.js"></script>    <!-- 必须紧跟 nav.js：nav.js 会跳过带 data-menu 的栏目，两个脚本才不打架 -->
+<script src="js/hover.js"></script>
+</body>
+</html>

@@ -3,9 +3,13 @@
   友南开发技术（深圳）有限公司 · 公司站
   ------------------------------------------------------------
   骨架来自 E:\网页\V2.0（极曜微科技那套）：同一套设计令牌、同一套导航与渐显脚本，
-  只换了内容和这站才有的三个版块（链路图 .arch / 配套品类 .goods / 经营范围 .scope）。
+  只换了内容和这站才有的四个版块（链路图 .arch / 定制产品 .boards / 配套品类 .goods / 经营范围 .scope）。
   内容来源：你给的营业执照经营范围原文，没有编造案例、客户数、资质证号。
-  页面顺序：首屏（业务关键词滚动条）→ 业务方向 → 链路上做哪几段 → 设备与器材配套
+  「定制」一节的四张图（img/）是 AI 渲染的产品形态示意，不是已交付实物照片；
+  页面上按客户视角写成产品说明，这条出处只记在这里，构建脚本 tools/build-single.mjs 会把它们转成 data URI 内联。
+  同一批图在首屏还有一排小的（img/hero/，640×451，由 tools/make-hero-thumbs.ps1 等比缩放生成）——
+  首屏不能 lazy，所以那一排必须用缩图，别改成引用 img/ 原图。
+  页面顺序：首屏（业务关键词滚动条 + 四块定制产品图）→ 业务方向 → 链路上做哪几段 → 定制开发产品 → 设备与器材配套
        → 数字带（含口径说明）→ 合作流程 → 经营范围（一般 / 许可）→ 联系。
   还没定的东西（电话、邮箱、地址、备案号）一律标成 .todo，不给假的，见 css/layout.css 第 9 节。
 -->
@@ -43,7 +47,7 @@
     <nav class="nav__links">
       <a href="#services" data-menu="services" aria-expanded="false" aria-controls="menu-services" aria-haspopup="true">业务<span class="caret" aria-hidden="true">▾</span></a>
       <a href="#arch" data-menu="arch" aria-expanded="false" aria-controls="menu-arch" aria-haspopup="true">链路<span class="caret" aria-hidden="true">▾</span></a>
-      <a href="#boards">定制</a>    <!-- 没有对应面板，就按上面注释说的退成普通锚点：点下去直接滚到那一节 -->
+      <a href="#boards">定制开发</a>    <!-- 没有对应面板，就按上面注释说的退成普通锚点：点下去直接滚到那一节 -->
       <a href="#goods" data-menu="goods" aria-expanded="false" aria-controls="menu-goods" aria-haspopup="true">配套<span class="caret" aria-hidden="true">▾</span></a>
       <a href="#flow" data-menu="flow" aria-expanded="false" aria-controls="menu-flow" aria-haspopup="true">流程<span class="caret" aria-hidden="true">▾</span></a>
       <a href="#scope" data-menu="scope" aria-expanded="false" aria-controls="menu-scope" aria-haspopup="true">经营范围<span class="caret" aria-hidden="true">▾</span></a>
@@ -212,7 +216,7 @@
       <div>
         <a class="menu__item" href="#services">业务方向<span>九项研发与技术服务 + 技术转让推广</span></a>
         <a class="menu__item" href="#arch">链路五段<span>设备 / 边缘 / 网络 / 平台 / 应用</span></a>
-        <a class="menu__item" href="#boards">定制产品示意<span>板卡 / 芯片模组 / 网关整机 / 数据看板</span></a>
+        <a class="menu__item" href="#boards">定制开发产品<span>板卡 / 模组 / 网关整机 / 数据平台</span></a>
         <a class="menu__item" href="#goods">设备与器材配套<span>登记在册的九类</span></a>
         <a class="menu__item" href="#numbers">数字与口径<span>10 / 9 / 2 / 23 怎么数出来的</span></a>
         <a class="menu__item" href="#flow">合作流程<span>从说清场景到运维值守</span></a>
@@ -240,6 +244,17 @@
     <a class="link-arrow" href="#services">看业务方向 <span class="ar">›</span></a>
   </div>
   <p class="hero__hint" data-rv>说清三件事就够开始：用在什么场景、要接什么设备或系统、大概什么预算。</p>
+
+  <!-- 定制产品四块图放进首屏第一排：不滚就要看得到产品长什么样。
+       图用 img/hero/ 那套 640×451 缩图（tools/make-hero-thumbs.ps1 从 img/ 原图等比缩放生成，共 141KB），
+       首屏不能 lazy，所以不许在这里引用 960×677 的原图（那是 322KB）。
+       点任意一块滚到 #boards 看整图和交付口径。 -->
+  <div class="hboards" data-rv>
+    <a class="hboards__i" href="#boards"><img src="img/hero/board-pcb.jpg" alt="定制控制板卡产品示意图：蓝色阻焊印制电路板" width="640" height="451" decoding="async"><b>定制控制板卡</b></a>
+    <a class="hboards__i" href="#boards"><img src="img/hero/chip-module.jpg" alt="芯片与核心模组产品示意图：芯片贴装于绿色载板" width="640" height="451" decoding="async"><b>芯片与核心模组</b></a>
+    <a class="hboards__i" href="#boards"><img src="img/hero/iot-gateway.jpg" alt="边缘网关整机产品示意图：金属外壳双天线" width="640" height="451" decoding="async"><b>边缘网关整机</b></a>
+    <a class="hboards__i" href="#boards"><img src="img/hero/data-dashboard.jpg" alt="平台与数据看板产品示意图：显示器与笔记本上的图表界面" width="640" height="451" decoding="async"><b>平台与数据看板</b></a>
+  </div>
 
   <!-- 业务关键词滚动条：写在 hero 里面 + absolute 贴底，不用往下滚就能看到我们在做什么。
        内容复制两份、轨道位移 -50% —— 少了第二份就会滚出空白。 -->
@@ -312,33 +327,33 @@
   </div>
 </section>
 
-<!-- ============ 定制开发的板卡与整机（AI 渲染示意） ============ -->
+<!-- ============ 定制开发：板卡 / 模组 / 整机 / 平台 ============ -->
 <section class="section section--alt" id="boards">
   <div class="wrap">
     <div class="sec-head">
-      <p class="t-eyebrow" data-rv>Custom hardware</p>
-      <h2 class="t-title" data-rv>定制出来的东西，大概长这样</h2>
-      <p class="t-body" data-rv style="margin-top:12px">下面四张是 AI 渲染的示意图，用来说明我们做的东西是什么形态：不是已交付的实物照片，也不对应任何在售型号。实际板框、器件位置、外壳颜色与丝印按项目的原理图和结构图出，出图确认后再打样。</p>
+      <p class="t-eyebrow" data-rv>Custom Hardware</p>
+      <h2 class="t-title" data-rv>板卡、模组、整机到平台<br>按层级交付</h2>
+      <p class="t-body" data-rv style="margin-top:12px">定制按四个层级承接：单板设计、核心模组、边缘整机、数据平台。每一级都可以单独委托，也可以串成一条从现场采集到业务看板的完整链路，接口与数据口径在方案阶段一次定下来。</p>
     </div>
     <div class="boards">
       <figure class="board" data-rv>
-        <div class="board__ph"><img src="img/board-pcb.jpg" alt="定制控制板卡渲染示意图：蓝色阻焊单层板，带连接器、主控芯片与金手指" width="960" height="677" loading="lazy" decoding="async"></div>
-        <figcaption><b>定制控制板卡</b><span>原理图、Layout、打样与贴片跟进；板框按结构件和安装位反推。</span></figcaption>
+        <div class="board__ph"><img src="img/board-pcb.jpg" alt="定制控制板卡产品示意图：蓝色阻焊印制电路板，含主控芯片、排针连接器与金手指" width="960" height="677" loading="lazy" decoding="async"></div>
+        <figcaption><b>定制控制板卡</b><span>原理图与多层板 Layout，覆盖电源树、阻抗控制与 EMC 预处理；板框和接口位置按结构件、安装位反推。交付含原理图、BOM、Gerber 与贴片调试记录。</span></figcaption>
       </figure>
       <figure class="board" data-rv>
-        <div class="board__ph"><img src="img/chip-module.jpg" alt="芯片与载板模组渲染示意图：芯片封装贴在载板上，带天线座与焊球" width="960" height="677" loading="lazy" decoding="async"></div>
-        <figcaption><b>芯片与核心模组</b><span>选型、最小系统与载板设计；需要时按模组级方案交付。</span></figcaption>
+        <div class="board__ph"><img src="img/chip-module.jpg" alt="芯片与核心模组产品示意图：芯片封装贴装于绿色载板，含金手指与射频连接" width="960" height="677" loading="lazy" decoding="async"></div>
+        <figcaption><b>芯片与核心模组</b><span>主控与射频芯片选型、最小系统与载板设计，BGA 封装布线与钢网输出。以模组形式交付时同步提供驱动、烧录与产测脚本。</span></figcaption>
       </figure>
       <figure class="board" data-rv>
-        <div class="board__ph"><img src="img/iot-gateway.jpg" alt="边缘网关整机渲染示意图：浅色外壳、两根天线与一排状态指示灯" width="960" height="677" loading="lazy" decoding="async"></div>
-        <figcaption><b>边缘网关整机</b><span>现场协议适配与本地缓存；外壳、导轨与天线方式按现场定。</span></figcaption>
+        <div class="board__ph"><img src="img/iot-gateway.jpg" alt="边缘网关整机产品示意图：金属外壳、双天线与状态指示灯" width="960" height="677" loading="lazy" decoding="async"></div>
+        <figcaption><b>边缘网关整机</b><span>Modbus、CAN、MQTT 等协议接入，本地缓存与断点续传，4G 与以太网双链路冗余。外壳形式、导轨安装与天线方式按现场工况确定。</span></figcaption>
       </figure>
       <figure class="board" data-rv>
-        <div class="board__ph"><img src="img/data-dashboard.jpg" alt="数据服务看板渲染示意图：显示器与笔记本上的浅色图表界面，文字为不可读占位" width="960" height="677" loading="lazy" decoding="async"></div>
-        <figcaption><b>平台与数据看板</b><span>入库、指标口径、权限、告警之后的呈现层，桌面与现场大屏同一套。</span></figcaption>
+        <div class="board__ph"><img src="img/data-dashboard.jpg" alt="平台与数据看板产品示意图：显示器与笔记本上的图表化数据界面" width="960" height="677" loading="lazy" decoding="async"></div>
+        <figcaption><b>平台与数据看板</b><span>数据入库、指标口径统一、权限分级与告警联动。桌面端、移动端与现场大屏共用同一套数据接口，指标定义只维护一份。</span></figcaption>
       </figure>
     </div>
-    <p class="t-fine" data-rv style="margin-top:18px">示意图由 AI 生成，只表达形态，不作为验收依据；界面里的文字与数字都是不可读的占位，不含任何真实客户数据。</p>
+    <p class="t-fine" data-rv style="margin-top:18px">以上为产品形态示意，具体器件、层数、结构与接口以项目原理图和结构图为准；板卡与模组类项目在图纸确认后进入打样。对应营业执照登记项目：集成电路芯片设计及服务、物联网技术研发、信息系统集成服务、工业互联网数据服务。</p>
   </div>
 </section>
 

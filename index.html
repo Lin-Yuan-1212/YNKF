@@ -43,6 +43,7 @@
     <nav class="nav__links">
       <a href="#services" data-menu="services" aria-expanded="false" aria-controls="menu-services" aria-haspopup="true">业务<span class="caret" aria-hidden="true">▾</span></a>
       <a href="#arch" data-menu="arch" aria-expanded="false" aria-controls="menu-arch" aria-haspopup="true">链路<span class="caret" aria-hidden="true">▾</span></a>
+      <a href="#boards">定制</a>    <!-- 没有对应面板，就按上面注释说的退成普通锚点：点下去直接滚到那一节 -->
       <a href="#goods" data-menu="goods" aria-expanded="false" aria-controls="menu-goods" aria-haspopup="true">配套<span class="caret" aria-hidden="true">▾</span></a>
       <a href="#flow" data-menu="flow" aria-expanded="false" aria-controls="menu-flow" aria-haspopup="true">流程<span class="caret" aria-hidden="true">▾</span></a>
       <a href="#scope" data-menu="scope" aria-expanded="false" aria-controls="menu-scope" aria-haspopup="true">经营范围<span class="caret" aria-hidden="true">▾</span></a>
@@ -211,6 +212,7 @@
       <div>
         <a class="menu__item" href="#services">业务方向<span>九项研发与技术服务 + 技术转让推广</span></a>
         <a class="menu__item" href="#arch">链路五段<span>设备 / 边缘 / 网络 / 平台 / 应用</span></a>
+        <a class="menu__item" href="#boards">定制产品示意<span>板卡 / 芯片模组 / 网关整机 / 数据看板</span></a>
         <a class="menu__item" href="#goods">设备与器材配套<span>登记在册的九类</span></a>
         <a class="menu__item" href="#numbers">数字与口径<span>10 / 9 / 2 / 23 怎么数出来的</span></a>
         <a class="menu__item" href="#flow">合作流程<span>从说清场景到运维值守</span></a>
@@ -310,8 +312,38 @@
   </div>
 </section>
 
+<!-- ============ 定制开发的板卡与整机（AI 渲染示意） ============ -->
+<section class="section section--alt" id="boards">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="t-eyebrow" data-rv>Custom hardware</p>
+      <h2 class="t-title" data-rv>定制出来的东西，大概长这样</h2>
+      <p class="t-body" data-rv style="margin-top:12px">下面四张是 AI 渲染的示意图，用来说明我们做的东西是什么形态：不是已交付的实物照片，也不对应任何在售型号。实际板框、器件位置、外壳颜色与丝印按项目的原理图和结构图出，出图确认后再打样。</p>
+    </div>
+    <div class="boards">
+      <figure class="board" data-rv>
+        <div class="board__ph"><img src="img/board-pcb.jpg" alt="定制控制板卡渲染示意图：蓝色阻焊单层板，带连接器、主控芯片与金手指" width="960" height="677" loading="lazy" decoding="async"></div>
+        <figcaption><b>定制控制板卡</b><span>原理图、Layout、打样与贴片跟进；板框按结构件和安装位反推。</span></figcaption>
+      </figure>
+      <figure class="board" data-rv>
+        <div class="board__ph"><img src="img/chip-module.jpg" alt="芯片与载板模组渲染示意图：芯片封装贴在载板上，带天线座与焊球" width="960" height="677" loading="lazy" decoding="async"></div>
+        <figcaption><b>芯片与核心模组</b><span>选型、最小系统与载板设计；需要时按模组级方案交付。</span></figcaption>
+      </figure>
+      <figure class="board" data-rv>
+        <div class="board__ph"><img src="img/iot-gateway.jpg" alt="边缘网关整机渲染示意图：浅色外壳、两根天线与一排状态指示灯" width="960" height="677" loading="lazy" decoding="async"></div>
+        <figcaption><b>边缘网关整机</b><span>现场协议适配与本地缓存；外壳、导轨与天线方式按现场定。</span></figcaption>
+      </figure>
+      <figure class="board" data-rv>
+        <div class="board__ph"><img src="img/data-dashboard.jpg" alt="数据服务看板渲染示意图：显示器与笔记本上的浅色图表界面，文字为不可读占位" width="960" height="677" loading="lazy" decoding="async"></div>
+        <figcaption><b>平台与数据看板</b><span>入库、指标口径、权限、告警之后的呈现层，桌面与现场大屏同一套。</span></figcaption>
+      </figure>
+    </div>
+    <p class="t-fine" data-rv style="margin-top:18px">示意图由 AI 生成，只表达形态，不作为验收依据；界面里的文字与数字都是不可读的占位，不含任何真实客户数据。</p>
+  </div>
+</section>
+
 <!-- ============ 设备与器材配套 ============ -->
-<section class="section section--alt" id="goods">
+<section class="section" id="goods">
   <div class="wrap">
     <div class="sec-head">
       <p class="t-eyebrow" data-rv>Supply</p>
@@ -337,7 +369,7 @@
 </section>
 
 <!-- ============ 数字带 ============ -->
-<section class="section" id="numbers">
+<section class="section section--alt" id="numbers">
   <div class="wrap">
     <div class="stats">
       <div data-rv><div class="stat__num" data-to="10" data-suffix=" 项">0</div><div class="stat__lab">研发与技术服务</div></div>
@@ -354,7 +386,7 @@
 </section>
 
 <!-- ============ 合作流程 ============ -->
-<section class="section section--alt" id="flow">
+<section class="section" id="flow">
   <div class="wrap" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:48px;align-items:start">
     <div class="sec-head" style="margin:0">
       <p class="t-eyebrow" data-rv="left">How it works</p>

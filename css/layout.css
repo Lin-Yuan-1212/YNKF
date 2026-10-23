@@ -145,6 +145,23 @@
 .goods__v{font-size:14px;color:var(--ink-2)}
 @media (max-width:620px){ .goods__row{grid-template-columns:1fr;gap:4px} }
 
+/* ---------- 6.5 定制产品渲染图：两列，图在上说明在下 ----------
+   承载用 .board（跟 .card 同一档描边和圆角），图片本身是浅灰棚拍底，
+   深色主题下把说明区压到 #1d1d1f，否则图会直接糊进黑背景里。 */
+.boards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:760px){ .boards{grid-template-columns:1fr} }
+.board{
+  margin:0;display:flex;flex-direction:column;
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+}
+.board__ph{background:var(--bg-2);border-bottom:1px solid var(--line)} /* 先占住高度，图没到位时不跳版 */
+.board__ph img{display:block;width:100%;height:auto}
+.board figcaption{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px}
+.board figcaption b{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.board figcaption span{font-size:14px;line-height:1.6;color:var(--ink-2)}
+[data-theme="dark"] .board{background:#1d1d1f;border-color:rgba(255,255,255,.14)}
+[data-theme="dark"] .board__ph{background:#2a2a2d;border-color:rgba(255,255,255,.14)}
+
 /* ---------- 7. 经营范围面板：一般 / 许可 两栏，逐条照营业执照列 ---------- */
 .scope{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
 @media (max-width:760px){ .scope{grid-template-columns:1fr} }

@@ -63,12 +63,43 @@
 /* 首屏下面那句"三句话说清来意"的引导条：不放进正文，避免和下面的分区标题重复啰嗦 */
 .hero__hint{margin-top:18px;font-size:14px;color:var(--ink-3);max-width:44ch}
 
+/* ---------- 2b. 首屏第一排：四块定制产品图 ----------
+   为什么放这里：他要"不滚就能看到产品长什么样"，重要内容不许藏在首屏以下。
+   图高一律用 svh 而不是定死像素 —— 这条是极曜微那次"首屏内容把贴底滚动条顶到折叠线以下"换来的：
+   只要图高跟着窗口高度收，贴底的关键词滚动条就一定还在首屏里。
+   承载沿用整套站的做法：平涂 + 1px 描边 + 圆角，悬停只让描边带点重音色，不加投影不加位移
+   （四块一起跳会晃，首屏尤其明显）。
+   这一档尺寸是 10-23 他嫌"首页图片太小"之后放大的：整排宽度从 --maxw(1024) 放宽到 1280，
+   图高上限 120→196，名字 13→14px。文字那一叠没动，靠 svh 系数保证矮窗口不把滚动条顶出首屏。 */
+.hboards{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;
+  width:100%;max-width:min(1280px,100%);margin-top:clamp(22px,3.6vh,38px);
+}
+.hboards__i{display:flex;flex-direction:column;gap:8px;min-width:0;color:inherit}
+.hboards__i img{
+  display:block;width:100%;height:clamp(120px,20svh,196px);object-fit:cover;
+  background:var(--bg-2);border:1px solid var(--line);border-radius:16px;
+}
+.hboards__i b{font-size:14px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hboards__i:hover b{color:var(--accent)}
+.hboards__i:hover img{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+/* 手机竖屏：四列每块只剩 80px 宽，图里是什么读不出来 —— 改成横滑一排，
+   每块占 76% 宽（375px 屏上约 285px），露出下一块一角，暗示可以滑（scroll-snap 松手自动对齐）。 */
+@media (max-width:620px){
+  .hboards{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin-top:18px;scrollbar-width:none}
+  .hboards::-webkit-scrollbar{display:none}
+  .hboards__i{flex:0 0 min(76%,285px);scroll-snap-align:start}
+  .hboards__i img{height:clamp(112px,17svh,150px)}
+}
+
 /* 矮窗口（笔电上半屏、手机横屏）：把首屏整组收一号，保证"滚动条在首屏底部"这件事成立。 */
 @media (max-height:800px){
   .hero{padding-top:24px;padding-bottom:92px}
   .hero .t-hero{font-size:clamp(30px,5.4vw,62px)}
   .hero .t-sub{font-size:clamp(15px,1.8vw,19px)}
   .hero__cta{margin-top:20px}
+  .hboards{margin-top:16px}
+  .hboards__i img{height:clamp(100px,17svh,164px)}
 }
 @media (max-height:640px){
   .hero{padding-top:16px;padding-bottom:86px}
@@ -76,6 +107,8 @@
   .hero .t-sub{font-size:14px}
   .hero__cta{margin-top:14px}
   .hero__hint{display:none}
+  .hboards__i img{height:clamp(82px,14svh,130px)}   /* 窗口再矮就只收图，四块和名字不能掉出首屏 */
+  .hboards__i b{font-size:13px}
 }
 
 /* ---------- 3. 特性网格（Bento 风格）----------
